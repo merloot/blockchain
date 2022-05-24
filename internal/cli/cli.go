@@ -1,17 +1,17 @@
-package main
+package cli
 
 import (
 	"flag"
 	"fmt"
 	"log"
-	"merloot/blockchain/pkg/blockchain"
+	"merloot/blockchain/internal/blockchain"
 	"os"
 	"strconv"
 )
 
 // CLI responsible for processing command line arguments
 type CLI struct {
-	bc *blockchain.Blockchain
+	BC *blockchain.Blockchain
 }
 
 func (cli *CLI) printUsage() {
@@ -28,12 +28,12 @@ func (cli *CLI) validateArgs() {
 }
 
 func (cli *CLI) addBlock(data string) {
-	cli.bc.AddBlock(data)
+	cli.BC.AddBlock(data)
 	fmt.Println("Success!")
 }
 
 func (cli *CLI) printChain() {
-	bci := cli.bc.Iterator()
+	bci := cli.BC.Iterator()
 
 	for {
 		block := bci.Next()
@@ -41,7 +41,7 @@ func (cli *CLI) printChain() {
 		fmt.Printf("Prev. hash: %x\n", block.PrevBlockHash)
 		fmt.Printf("Data: %s\n", block.Data)
 		fmt.Printf("Hash: %x\n", block.Hash)
-		pow := NewProofOfWork(block)
+		pow := blockchain.NewProofOfWork(block)
 		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate()))
 		fmt.Println()
 
